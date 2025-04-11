@@ -19,7 +19,7 @@ export function Login() {
           className="relative top-5 right-6"></img>
       </div>
       <div className="w-[350px] flex flex-col ] justify-center items-center p-10 border-1 border-gray-300/20 ">
-        <div className="font-bold text-[40px] text-center pb-5 font-display font ">
+        <div className="font-bold text-[40px] text-center pb-5 font-display  ">
           Instagram
         </div>
         <div className="mt-5">

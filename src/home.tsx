@@ -1,3 +1,6 @@
+import { Feed } from "./components/feed/Feed";
+import { PostCard } from "./components/post/PostCard";
+
 export function Home() {
-  return "you are logged";
+  return <Feed />;
 }

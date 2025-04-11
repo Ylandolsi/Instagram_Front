@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/authContext";
 
 export function GoogleAuthCallback() {
-  const { checkAuth } = useAuth();
+  const { checkAuth, setAuthenticationStatus } = useAuth();
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -11,7 +11,7 @@ export function GoogleAuthCallback() {
     async function handleGoogleCallback() {
       try {
         await checkAuth();
-        localStorage.setItem("Auth", "true");
+        setAuthenticationStatus(true);
         navigate("/");
       } catch (err) {
         console.error("Google authentication failed:", err);

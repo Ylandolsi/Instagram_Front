@@ -14,7 +14,7 @@ import { Input } from "../ui/input";
 import { PasswordInput } from "../ui/password-input";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/authContext";
-import { Error } from "@/Error";
+import { Error } from "@/components/auth/Error";
 import usePersistedState from "@/hooks/usePersistedState";
 
 const loginSchema = z.object({

@@ -14,9 +14,8 @@ import { Input } from "../ui/input";
 import { PasswordInput } from "../ui/password-input";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/authContext";
-import { Error } from "@/Error";
+import { Error } from "@/components/auth/Error";
 import usePersistedState from "@/hooks/usePersistedState";
-import { useEffect } from "react";
 
 const registerSchema = z
   .object({
@@ -77,6 +76,7 @@ export function RegisterForm() {
     <div className="mx-auto ">
       <Form {...form}>
         <Error />
+
         <form
           onSubmit={form.handleSubmit(onSubmit)}
           className="space-y-8 max-w-3xl mx-auto ">

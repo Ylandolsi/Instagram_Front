@@ -10,6 +10,8 @@ import {
   useState,
 } from "react";
 
+import { toast, ToastContainer } from "react-toastify";
+
 interface AuthContextType {
   user: User | null;
   isAuthenticated: boolean;
@@ -22,6 +24,7 @@ interface AuthContextType {
   setError: (error: ErrorAxios) => void;
   error: ErrorAxios | null;
   clearError: () => void;
+  setAuthenticationStatus: (isAuthenticated: boolean) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | null>(null);
@@ -40,21 +43,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const { setError, error, clearError } = useError();
 
+  const setAuthenticationStatus = (isAuthenticated: boolean) => {
+    localStorage.setItem("Auth", isAuthenticated ? "true" : "false");
+    setIsAuthenticated(isAuthenticated);
+  };
+
   const checkAuth = async () => {
     try {
       const userData = await authApi.getCurrentUser();
       setUser(userData.data.data);
-      setIsAuthenticated(true);
+      setAuthenticationStatus(true);
     } catch (error) {
       setUser(null);
-      setIsAuthenticated(false);
+      setAuthenticationStatus(false);
     } finally {
       setLoading(false);
     }
   };
 
   useEffect(() => {
-    if (localStorage.getItem("Auth") != "true") {
+    const isAuthenticated = localStorage.getItem("Auth") === "true";
+    if (!isAuthenticated) {
       setLoading(false);
       return;
     }
@@ -68,8 +77,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await authApi.login(credentials);
       const userData = await authApi.getCurrentUser();
       setUser(userData.data.data);
-      setIsAuthenticated(true);
-      localStorage.setItem("Auth", "true");
+      setAuthenticationStatus(true);
       console.log(userData.data.data);
     } catch (error) {
       const authError = handleError(error);
@@ -85,8 +93,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await authApi.logout();
       setUser(null);
-      setIsAuthenticated(false);
-      localStorage.setItem("Auth", "false");
+      setAuthenticationStatus(false);
     } catch (error) {
       console.error("Logout failed", error);
       throw error;
@@ -97,6 +104,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const register = async (userData: RegisterData) => {
     setLoading(true);
+    clearError();
+
     try {
       await authApi.register(userData);
       await login({ email: userData.email, password: userData.password });
@@ -128,6 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setError,
     error,
     clearError,
+    setAuthenticationStatus,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
