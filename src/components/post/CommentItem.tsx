@@ -3,12 +3,15 @@ import { useAuth } from "@/contexts/authContext";
 import { Comment } from "@/types/comments.type";
 import { commentsApi } from "@/api/comments";
 import { Input } from "@/components/ui/input";
-import { Send } from "lucide-react";
+import { Heart, Send } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import { mapToComment } from "./PostCard";
 
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
+import { CommentForm } from "./CommentForm";
+import { HeartFilledOrNotFilled } from "./PostActions";
+import { likesApi } from "@/api/likes";
 
 dayjs.extend(relativeTime);
 
@@ -26,6 +29,23 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
   const [replyContent, setReplyContent] = useState<Comment[]>([]);
   const [openReplyComment, setOpenReplyComment] = useState<boolean>(false);
   const [repliesVisible, setRepliesVisible] = useState(false);
+  const [liked, setLiked] = useState(comment.isLikedByCurrentUser);
+
+  const likeComment = async () => {
+    if (!user) {
+      toast.error("You must be logged in to like a comment");
+      return;
+    }
+    try {
+      await likesApi.toggleLikeComment(comment.id);
+      setLiked(!liked);
+      comment.likeCount += liked ? -1 : 1;
+    } catch (error) {
+      console.error("Error liking comment:", error);
+      toast.error("Failed to like comment");
+    }
+  };
+
   const loadMoreReplies = async () => {
     if (loadingReplies || !hasNextPage) return;
     setLoadingReplies(true);
@@ -94,46 +114,55 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
 
   return (
     <div className="ml-2 mb-3">
-      <div className="flex items-start gap-2">
-        <img
-          src={
-            comment.user.profilePictureUrl || "https://via.placeholder.com/80"
-          }
-          className="w-8 h-8 rounded-full"
-          alt={comment.user.userName}
-          onError={(e) => {
-            e.currentTarget.onerror = null;
-            e.currentTarget.src = "https://via.placeholder.com/80";
-          }}
-        />
-        <div className="flex flex-col">
-          <div>
-            <span className="font-bold mr-2">{comment.user.userName}</span>
-            <span>{comment.content}</span>
-          </div>
-          <div className="text-xs text-gray-400 flex gap-3">
-            {getRelativeTime(comment.createdAt)}
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex gap-2">
+          <img
+            src={
+              comment.user.profilePictureUrl || "https://via.placeholder.com/80"
+            }
+            className="w-8 h-8 rounded-full"
+            alt={comment.user.userName}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = "https://via.placeholder.com/80";
+            }}
+          />
+          <div className="flex flex-col">
+            <div>
+              <span className="font-bold mr-2">{comment.user.userName}</span>
+              <span>{comment.content}</span>
+            </div>
+            <div className="text-xs text-gray-400 flex gap-3">
+              {getRelativeTime(comment.createdAt)}
 
-            <span
-              className="cursor-pointer"
-              onClick={() => {
-                setOpenReplyComment(!openReplyComment);
-                setReplyInputText("");
-              }}>
-              {openReplyComment ? "Cancel" : "Reply"}
-            </span>
-
-            {comment.replyCount > 0 && (
               <span
                 className="cursor-pointer"
-                onClick={async () => {
-                  await loadMoreReplies();
-                  setRepliesVisible(!repliesVisible);
+                onClick={() => {
+                  setOpenReplyComment(!openReplyComment);
+                  setReplyInputText("");
                 }}>
-                {repliesVisible ? "Hide replies" : `View replies`}
+                {openReplyComment ? "Cancel" : "Reply"}
               </span>
-            )}
+
+              {comment.replyCount > 0 && (
+                <span
+                  className="cursor-pointer"
+                  onClick={async () => {
+                    await loadMoreReplies();
+                    setRepliesVisible(!repliesVisible);
+                  }}>
+                  {repliesVisible ? "Hide replies" : `View replies`}
+                </span>
+              )}
+            </div>
           </div>
+        </div>
+        <div>
+          <HeartFilledOrNotFilled
+            className="cursor-pointer"
+            onClick={likeComment}
+            liked={liked}
+          />
         </div>
       </div>
 
@@ -157,22 +186,17 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
         </div>
       )}
       {openReplyComment && (
-        <div className="mt-2 ml-8 flex items-center gap-2">
-          <Input
-            className="text-sm"
-            placeholder="Reply to comment..."
-            value={replyInputText}
-            onChange={(e) => setReplyInputText(e.target.value)}
-          />
-          <Send
-            className="cursor-pointer"
-            size={16}
-            onClick={async () => {
-              await handleAddReply();
-              setOpenReplyComment(false);
-            }}
-          />
-        </div>
+        <CommentForm
+          contentComment={replyInputText}
+          setcontentComment={setReplyInputText}
+          profilePicture={user?.profilePictureUrl}
+          handleSend={async () => {
+            await handleAddReply();
+            setOpenReplyComment(false);
+          }}
+          className="mt-2 ml-8 "
+          placeholder="Add a reply..."
+        />
       )}
       <ToastContainer />
     </div>

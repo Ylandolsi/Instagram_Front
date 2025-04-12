@@ -1,7 +1,16 @@
-import { likesApi } from "@/api/likes";
 import { MessageCircle, Send } from "lucide-react";
 
-function HeartFilledOrNotFilled({ className, liked, onClick }: any) {
+interface HeartProps {
+  className: string;
+  liked: boolean;
+  onClick: () => void;
+}
+
+export function HeartFilledOrNotFilled({
+  className,
+  liked,
+  onClick,
+}: HeartProps) {
   return liked ? (
     <svg
       className={className}
@@ -37,17 +46,18 @@ function HeartFilledOrNotFilled({ className, liked, onClick }: any) {
   );
 }
 
+interface PostActionsProps {
+  id: string;
+  isLiked: boolean;
+  toggleLike: () => void;
+  toggleCommentReply: () => void;
+}
 export function PostActions({
   id,
   isLiked,
   toggleLike,
   toggleCommentReply,
-}: {
-  id: string;
-  isLiked: boolean;
-  toggleLike: () => void;
-  toggleCommentReply: () => void;
-}) {
+}: PostActionsProps) {
   const handleLikePost = async () => {
     try {
       toggleLike();

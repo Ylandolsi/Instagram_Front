@@ -1,11 +1,7 @@
-import pdp from "@/assets/pdp.png";
 import { Post } from "@/types/post.types";
-import dayjs from "dayjs";
-import relativeTime from "dayjs/plugin/relativeTime";
 import { CarouselImage } from "./PostCarousel";
 import { PostActions } from "./PostActions";
-import { useEffect, useRef, useState } from "react";
-import { likesApi } from "@/api/likes";
+import { useRef, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import { Likes } from "./Likes";
 import { Input } from "@/components/ui/input";
@@ -14,27 +10,28 @@ import { useAuth } from "@/contexts/authContext";
 import { commentsApi } from "@/api/comments";
 import CommentItem from "./CommentItem";
 import { Comment } from "@/types/comments.type";
-dayjs.extend(relativeTime);
-
-function getRelativeTime(date: Date) {
-  const dayjsDate = dayjs(date);
-  return dayjsDate.fromNow();
-}
+import PostHeader from "./PostHeader";
+import { useLikes } from "@/hooks/useLikes";
+import { CommentForm } from "./CommentForm";
 
 export function PostCard({ postData }: { postData: Post | undefined }) {
   const { user } = useAuth();
   if (!postData) return null;
 
-  const [isLiked, setisLiked] = useState<boolean>(
-    postData.isLikedByCurrentUser
-  );
-  const contentComment = useRef<HTMLInputElement | null>(null);
+  const { isLiked, likesCount, toggleLike, openHideLikes, likesOpen } =
+    useLikes(
+      postData.isLikedByCurrentUser,
+      postData.likeCount ?? 0,
+      postData.id,
+      true
+    );
+
+  const [contentComment, setcontentComment] = useState("");
+
   const [commentsShown, setcommentsShown] = useState(false);
   const [commentsCount, setCommentsCount] = useState<number>(
     postData.commentCount ?? 0
   );
-  const [likesCount, setLikesCount] = useState<number>(postData.likeCount ?? 0);
-  const [likesOpen, setLikesOpen] = useState<boolean>(false);
 
   const [addCommentRoot, setAddCommentRoot] = useState<boolean>(false);
   const [commentsRoot, setCommentsRoot] = useState<Comment[]>([]);
@@ -46,32 +43,14 @@ export function PostCard({ postData }: { postData: Post | undefined }) {
   const toggleCommentReply = () => {
     setAddCommentRoot(!addCommentRoot);
   };
-  const toggleLike = async () => {
-    try {
-      setisLiked(!isLiked);
-      await likesApi.toggleLikePost(postData.id);
-      if (isLiked) setLikesCount((prev) => prev - 1);
-      else setLikesCount((prev) => prev + 1);
-    } catch (e) {
-      toast.error("Error liking post");
-      setisLiked(!isLiked);
-    }
-  };
-
-  const openHideLikes = () => {
-    setLikesOpen(!likesOpen);
-  };
 
   const addComment = async (parentCommentId: string | null = null) => {
     if (!user) {
       toast.error("You must be logged in to comment");
       return;
     }
-    if (!contentComment.current) {
-      toast.error("Comment input not found");
-      return;
-    }
-    const content = contentComment.current?.value;
+
+    const content = contentComment;
     try {
       if (!content || content.trim() === "") {
         toast.error("Comment cannot be empty");
@@ -79,7 +58,7 @@ export function PostCard({ postData }: { postData: Post | undefined }) {
       }
       await commentsApi.createComment(postData.id, content, parentCommentId);
       setCommentsCount((prev) => prev + 1);
-      contentComment.current.value = "";
+      setcontentComment("");
 
       // Refresh root comments if they're currently shown
       if (commentsShown && parentCommentId === null) {
@@ -133,24 +112,8 @@ export function PostCard({ postData }: { postData: Post | undefined }) {
   };
 
   return (
-    <div className="flex flex-col max-w-[468px] gap-2 rounded-lg p-4">
-      <div className="flex justify-start gap-5">
-        <div className="rounded-full overflow-hidden">
-          <img
-            src={postData.user.profilePictureUrl || pdp}
-            width={50}
-            alt="Profile picture"
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = "https://via.placeholder.com/80";
-            }}
-          />
-        </div>
-        <div className="flex flex-col">
-          <div className="font-bold">{postData.user.userName}</div>
-          <div>{getRelativeTime(postData.createdAt)}</div>
-        </div>
-      </div>
+    <div className="flex flex-col max-w-[468px] gap-2 rounded-lg p-4 ">
+      <PostHeader postData={postData} />
       <CarouselImage images={postData.images} />
       <PostActions
         id={postData.id}
@@ -193,30 +156,15 @@ export function PostCard({ postData }: { postData: Post | undefined }) {
         </div>
       )}
       {addCommentRoot && (
-        <div className="relative w-full rounded-lg">
-          <Input
-            className="px-10 overflow-hidden"
-            placeholder="Add a new comment..."
-            style={{ backgroundColor: "#1e1e1f", overflowWrap: "break-word" }}
-            ref={contentComment}
-          />
-          <div className="absolute bottom-[13%] left-2">
-            <img
-              className="rounded-full"
-              src={user?.profilePictureUrl || pdp}
-              style={{ width: "25px" }}
-              alt="Profile"
-            />
-          </div>
-          <div
-            className="absolute bottom-[13%] right-2 cursor-pointer"
-            onClick={async () => {
-              await addComment(null);
-              setAddCommentRoot(false);
-            }}>
-            <Send />
-          </div>
-        </div>
+        <CommentForm
+          contentComment={contentComment}
+          setcontentComment={setcontentComment}
+          profilePicture={user?.profilePictureUrl}
+          handleSend={async () => {
+            await addComment(null);
+            setAddCommentRoot(false);
+          }}
+        />
       )}
       <Likes
         isOpen={likesOpen}
