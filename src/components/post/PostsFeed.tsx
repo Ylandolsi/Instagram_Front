@@ -52,7 +52,7 @@ export function PostsFeed() {
   console.log("posts", posts);
 
   return (
-    <div className="w-[468px] mx-auto flex flex-col gap-2">
+    <div className="max-w-[468px] mx-auto flex flex-col gap-2">
       {posts.map((postData) => (
         <PostCard key={postData.id} postData={postData} />
       ))}

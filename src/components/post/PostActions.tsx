@@ -1,9 +1,11 @@
+import { likesApi } from "@/api/likes";
 import { MessageCircle, Send } from "lucide-react";
 
-function HeartFilledOrNotFilled({ className, liked }: any) {
+function HeartFilledOrNotFilled({ className, liked, onClick }: any) {
   return liked ? (
     <svg
       className={className}
+      onClick={onClick}
       width="30"
       height="30"
       viewBox="0 0 24 24"
@@ -18,6 +20,7 @@ function HeartFilledOrNotFilled({ className, liked }: any) {
   ) : (
     <svg
       className={className}
+      onClick={onClick}
       width="30"
       height="30"
       viewBox="0 0 24 24"
@@ -34,11 +37,32 @@ function HeartFilledOrNotFilled({ className, liked }: any) {
   );
 }
 
-export function PostActions({ isLiked }: { isLiked: boolean }) {
+export function PostActions({
+  id,
+  isLiked,
+  toggleLike,
+  toggleCommentReply,
+}: {
+  id: string;
+  isLiked: boolean;
+  toggleLike: () => void;
+  toggleCommentReply: () => void;
+}) {
+  const handleLikePost = async () => {
+    try {
+      toggleLike();
+    } catch (error) {
+      console.error("Error liking post:", error);
+    }
+  };
   return (
     <div className="flex gap-3 items-center">
-      <HeartFilledOrNotFilled liked={isLiked} className="cursor-pointer" />
-      <MessageCircle />
+      <HeartFilledOrNotFilled
+        className="cursor-pointer"
+        liked={isLiked}
+        onClick={handleLikePost}
+      />
+      <MessageCircle onClick={toggleCommentReply} />
       <Send />
     </div>
   );

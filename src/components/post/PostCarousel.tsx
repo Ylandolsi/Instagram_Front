@@ -42,10 +42,10 @@ export function CarouselImage({ images }: { images: Image[] }) {
         </CarouselContent>
         <CarouselPrevious className="absolute left-1 text-black border-none outline-none  " />
         <CarouselNext className="absolute right-1  text-black border-none outline-none " />
+        <div className="absolute left-[50%] translate-x-[-50%] bottom-3 py-2 text-center text-sm text-muted-foreground">
+          {current} of {count}
+        </div>
       </Carousel>
-      <div className="py-2 text-center text-sm text-muted-foreground">
-        {current} of {count}
-      </div>
     </div>
   );
 }

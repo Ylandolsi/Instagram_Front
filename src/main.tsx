@@ -5,9 +5,9 @@ import AppRoutes from "./Routes";
 import { AuthProvider } from "./contexts/authContext";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
-    <AuthProvider>
-      <AppRoutes />
-    </AuthProvider>
-  </StrictMode>
+  // <StrictMode>
+  <AuthProvider>
+    <AppRoutes />
+  </AuthProvider>
+  // </StrictMode>
 );

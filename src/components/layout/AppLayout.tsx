@@ -1,17 +1,36 @@
 import { Outlet } from "react-router-dom";
 import { Navbar } from "./Navbar";
 import { MobileNavigation } from "./MobileNavigation";
+import { SideBar } from "./SideBar";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 const AppLayout = () => {
+  const isMobile = useMediaQuery("(max-width: 768px)");
+  const isTablet = useMediaQuery("(max-width: 1290px)");
+  const isDesktop = useMediaQuery("(min-width: 1291px)");
+
+  if (isMobile) {
+    return (
+      <div className="flex justify-center gap-2">
+        <Navbar />
+        <main className="mt-13">
+          <Outlet />
+        </main>
+
+        <div className="fixed bottom-0 left-0 right-0  pt-3 border border-t-2 z-10 bg-background">
+          <MobileNavigation />
+        </div>
+      </div>
+    );
+  }
   return (
-    <div className="">
-      <Navbar />
-      <main>
+    <div className="flex ">
+      <div className={isDesktop ? `w-[260px]` : `w-[72px]`}>
+        <SideBar withNames={isDesktop} />
+      </div>
+      <main className="grow flex justify-center">
         <Outlet />
       </main>
-      <div className="md:hidden fixed bottom-0 left-0 right-0  pt-3 border border-t-2 z-10 bg-background">
-        <MobileNavigation />
-      </div>
     </div>
   );
 };

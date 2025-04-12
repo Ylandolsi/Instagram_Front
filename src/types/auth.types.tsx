@@ -9,6 +9,7 @@ export interface User {
   bio?: string;
   followersCount: number;
   followingCount: number;
+  isFollowedByCurrentUser: boolean;
   //   postsCount: number;
 }
 
