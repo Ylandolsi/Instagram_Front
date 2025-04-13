@@ -24,11 +24,14 @@ const AppLayout = () => {
     );
   }
   return (
-    <div className="flex ">
+    <div className="">
       <div className={isDesktop ? `w-[260px]` : `w-[72px]`}>
         <SideBar withNames={isDesktop} />
       </div>
-      <main className="grow flex justify-center">
+      <main
+        className={`grow flex justify-center ${
+          isDesktop ? `ml-[260px]` : `ml-[72px]`
+        }`}>
         <Outlet />
       </main>
     </div>

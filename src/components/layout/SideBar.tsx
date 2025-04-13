@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 export function SideBar({ withNames }: { withNames?: boolean }) {
   const wid = withNames ? "w-[260px]" : "w-[72px]";
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
     setIsOpen(!isOpen);
@@ -15,7 +15,7 @@ export function SideBar({ withNames }: { withNames?: boolean }) {
     <div
       className={`fixed  flex flex-col ${
         withNames ? "flex-start pl-10" : "items-center"
-      }  gap-8 h-screen pt-10 ${wid} border-r border-amber-50/10`}>
+      }  gap-8 h-screen pt-10 ${wid} border-r border-amber-50/10 `}>
       <Link to="/" className="mb-10">
         <div className=" flex items-center gap-6">
           <Instagram size={30} />
@@ -66,7 +66,14 @@ export function SideBar({ withNames }: { withNames?: boolean }) {
           {withNames && <div className="text-lg font-semibold">More</div>}
         </div>
         {isOpen && (
-          <div className="absolute bottom-9 p-3 h-12 w-[200px] rounded-lg flex justify-center items-center text-sm font-semibold bg-[#212121] hover:bg-[#3d3d3d]">
+          <div
+            className="absolute bottom-9 p-3 h-12 w-[200px] rounded-lg flex justify-center items-center text-sm font-semibold bg-[#212121] hover:bg-[#3d3d3d]"
+            onClick={() => {
+              setIsOpen(false);
+
+              logout();
+              window.location.href = "/login";
+            }}>
             Log out
           </div>
         )}

@@ -33,7 +33,10 @@ const registerSchema = z
 
     firstName: z.string().min(1, { message: "First Name is required" }),
     lastName: z.string().min(1, { message: "Last Name is required" }),
-    userName: z.string().min(1, { message: "User Name is required" }),
+    userName: z
+      .string()
+      .min(1, { message: "User Name is required" })
+      .max(10, { message: "User Name must be less than 10 characters" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Passwords don't match",

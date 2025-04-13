@@ -40,9 +40,9 @@ export function Profile() {
     );
   }
   return (
-    <div className="flex flex-col w-full  ">
+    <div className="flex flex-col w-full ">
       <ProfileHeader userData={userData as User} />
-      <ProfileStats userData={userData as User} />
+      <ProfileStats userData={userData as User} apply={1} />
       <ProfileNavigation />
       <PostsGrid
         posts={posts}
