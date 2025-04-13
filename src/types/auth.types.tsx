@@ -10,7 +10,7 @@ export interface User {
   followersCount: number;
   followingCount: number;
   isFollowedByCurrentUser: boolean;
-  //   postsCount: number;
+  postsCount: number;
 }
 
 export interface LoginCredentials {

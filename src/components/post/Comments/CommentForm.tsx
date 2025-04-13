@@ -1,6 +1,6 @@
-import { Input } from "../ui/input";
+import { Input } from "@/components/ui/input";
 import { Send as SendIcon } from "lucide-react";
-import pdp from "@/assets/pdp.png";
+import blankpdp from "@/assets/blankpdp.png";
 import { cn } from "@/lib/utils";
 
 export function CommentForm({
@@ -30,7 +30,7 @@ export function CommentForm({
       <div className="absolute bottom-[13%] left-2">
         <img
           className="rounded-full"
-          src={profilePicture || pdp}
+          src={profilePicture || blankpdp}
           style={{ width: "25px" }}
           alt="Profile"
         />

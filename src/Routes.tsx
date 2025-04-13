@@ -7,6 +7,7 @@ import { useAuth } from "./contexts/authContext";
 import { NotFound } from "./pages/NotFoundPage";
 import { LoadingPage } from "./pages/LoadingPage";
 import { GoogleAuthCallback } from "./components/auth/GoogleAuthCallback";
+import { Profile } from "./components/profile/Profile";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -34,6 +35,7 @@ function AppRoutes() {
           path="/"
           element={user ? <AppLayout /> : <Navigate to="/login" />}>
           <Route index element={<Home />} />
+          <Route path="/profile/:id" element={<Profile />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

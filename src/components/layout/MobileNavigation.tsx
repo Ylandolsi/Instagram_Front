@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 
 export function MobileNavigation() {
   return (
-    <div className="flex justify-around w-full ">
+    <div className="flex justify-around w-full items-center    ">
       <Link to={"/"}>
-        <Home width={40} height={40} style={{ color: "#fff" }} />
+        <Home size={30} style={{ color: "#fff" }} />
       </Link>
     </div>
   );

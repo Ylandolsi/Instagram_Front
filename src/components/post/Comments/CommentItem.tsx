@@ -2,15 +2,13 @@ import { useState } from "react";
 import { useAuth } from "@/contexts/authContext";
 import { Comment } from "@/types/comments.type";
 import { commentsApi } from "@/api/comments";
-import { Input } from "@/components/ui/input";
-import { Heart, Send } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
-import { mapToComment } from "./PostCard";
-
+import { mapToComment } from "../utils/commentUtils";
+import blankpdp from "@/assets/blankpdp.png";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import { CommentForm } from "./CommentForm";
-import { HeartFilledOrNotFilled } from "./PostActions";
+import { HeartFilledOrNotFilled } from "../PostActions";
 import { likesApi } from "@/api/likes";
 
 dayjs.extend(relativeTime);
@@ -31,6 +29,7 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
   const [repliesVisible, setRepliesVisible] = useState(false);
   const [liked, setLiked] = useState(comment.isLikedByCurrentUser);
 
+  const pageSize = 5;
   const likeComment = async () => {
     if (!user) {
       toast.error("You must be logged in to like a comment");
@@ -54,7 +53,7 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
       const response = await commentsApi.getCommentsReplies(
         comment.id,
         page,
-        5
+        pageSize
       );
 
       setReplyContent([
@@ -97,7 +96,11 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
       //  to show the new one
       setPage(1);
       setReplyContent([]);
-      const response = await commentsApi.getCommentsReplies(comment.id, 1, 5);
+      const response = await commentsApi.getCommentsReplies(
+        comment.id,
+        1,
+        pageSize
+      );
 
       setReplyContent(
         response.data.data.items.map((item: any) => mapToComment(item))
@@ -113,13 +116,11 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
   };
 
   return (
-    <div className="ml-2 mb-3">
+    <div className="ml-2">
       <div className="flex items-start justify-between gap-2">
         <div className="flex gap-2">
           <img
-            src={
-              comment.user.profilePictureUrl || "https://via.placeholder.com/80"
-            }
+            src={comment.user.profilePictureUrl || blankpdp}
             className="w-8 h-8 rounded-full"
             alt={comment.user.userName}
             onError={(e) => {

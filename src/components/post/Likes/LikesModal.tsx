@@ -1,27 +1,27 @@
 import { X } from "lucide-react";
-import { Button } from "../ui/button";
+import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { User } from "@/types/auth.types";
 import { useAuth } from "@/contexts/authContext";
-import { Loader } from "../common/Loader";
+import { Loader } from "@/components/common/Loader";
 import { likesApi } from "@/api/likes";
 import useOutsideClick from "@/hooks/useOutsideClick";
+import blankpdp from "@/assets/blankpdp.png";
+import { FollowUnfollow } from "@/components/common/FollowUnfollow";
 
-export function Likes({
-  id,
-  isPost,
-  isOpen,
-  openHideLikes,
-  isLiked,
-  likesCount,
-}: {
-  id: string;
-  isPost: boolean;
+interface LikesModalProps {
+  postId: string;
   isOpen: boolean;
-  openHideLikes: () => void;
-  isLiked: boolean;
+  onClose: () => void;
   likesCount: number;
-}) {
+}
+
+export function LikesModal({
+  postId,
+  isOpen,
+  onClose,
+  likesCount,
+}: LikesModalProps) {
   const pageSize = 20;
   const [page, setPage] = useState<number>(1);
   const { user: currentUser } = useAuth();
@@ -34,7 +34,7 @@ export function Likes({
     setLoading(true);
     try {
       const response = await likesApi.getUsersWhoLikedPost(
-        id,
+        postId,
         resetList ? 1 : page,
         pageSize
       );
@@ -60,12 +60,12 @@ export function Likes({
   useEffect(() => {
     if (isOpen) {
       setUsersLiked([]);
-      setPage(2);
       fetchLikes(true);
+      setPage(2);
     }
   }, [isOpen, likesCount]);
 
-  useOutsideClick(outsideRef, () => openHideLikes());
+  useOutsideClick(outsideRef, () => onClose());
 
   return (
     isOpen && (
@@ -78,7 +78,7 @@ export function Likes({
             <div className="font-bold text-xl">Likes</div>
             <div
               className="w-[48px] h-[43px] flex justify-center cursor-pointer"
-              onClick={openHideLikes}>
+              onClick={onClose}>
               <X />
             </div>
           </div>
@@ -96,7 +96,7 @@ export function Likes({
                     <div className="flex gap-4 items-center ">
                       <div>
                         <img
-                          src={user.profilePictureUrl}
+                          src={user.profilePictureUrl || blankpdp}
                           className="rounded-full"
                           style={{ width: 40 }}
                           alt={user.userName}
@@ -114,16 +114,11 @@ export function Likes({
                         </div>
                       </div>
                     </div>
-                    {currentUser?.id !== user.id &&
-                      (user.isFollowedByCurrentUser ? (
-                        <Button className="bg-gray-400 shadow-none">
-                          Following
-                        </Button>
-                      ) : (
-                        <Button className="bg-blue-400 shadow-none">
-                          Follow
-                        </Button>
-                      ))}
+                    {currentUser?.id !== user.id && (
+                      <FollowUnfollow
+                        isFollowedByCurrentUser={user.isFollowedByCurrentUser}
+                      />
+                    )}
                   </div>
                 ))
               ) : (

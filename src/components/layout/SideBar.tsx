@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export function SideBar({ withNames }: { withNames?: boolean }) {
-  const wid = withNames ? "w-[244px]" : "w-[72px]";
+  const wid = withNames ? "w-[260px]" : "w-[72px]";
   const { user } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const handleClick = () => {
@@ -14,10 +14,10 @@ export function SideBar({ withNames }: { withNames?: boolean }) {
   return (
     <div
       className={`fixed  flex flex-col ${
-        withNames ? "flex-start ml-10" : "items-center"
+        withNames ? "flex-start pl-10" : "items-center"
       }  gap-8 h-screen pt-10 ${wid} border-r border-amber-50/10`}>
       <Link to="/" className="mb-10">
-        <div className="flex items-center gap-6">
+        <div className=" flex items-center gap-6">
           <Instagram size={30} />
           {withNames && <div className="text-3xl font-display">Instagram</div>}
         </div>
@@ -51,7 +51,7 @@ export function SideBar({ withNames }: { withNames?: boolean }) {
           )}
         </div>
       </Link>
-      <Link to="/">
+      <Link to={`/profile/${user?.id}`}>
         <div className="flex items-center gap-6">
           <div className="w-[30px] h-[30px]">
             <img src={user?.profilePictureUrl} className="rounded-full"></img>

@@ -13,11 +13,11 @@ const AppLayout = () => {
     return (
       <div className="flex justify-center gap-2">
         <Navbar />
-        <main className="mt-13">
+        <main className="mt-13 grow ">
           <Outlet />
         </main>
 
-        <div className="fixed bottom-0 left-0 right-0  pt-3 border border-t-2 z-10 bg-background">
+        <div className="fixed bottom-0 left-0 right-0  py-2 border border-t-2 z-10 bg-background">
           <MobileNavigation />
         </div>
       </div>
