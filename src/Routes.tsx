@@ -8,6 +8,7 @@ import { NotFound } from "./pages/NotFoundPage";
 import { LoadingPage } from "./pages/LoadingPage";
 import { GoogleAuthCallback } from "./components/auth/GoogleAuthCallback";
 import { Profile } from "./components/profile/Profile";
+import ImageUploaderWithCrop from "./components/upload/ImageUploaderWithCrop";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -36,6 +37,7 @@ function AppRoutes() {
           element={user ? <AppLayout /> : <Navigate to="/login" />}>
           <Route index element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
+          <Route path="/upload" element={<ImageUploaderWithCrop />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />

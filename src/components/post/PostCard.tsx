@@ -238,8 +238,8 @@ export function PostCard({ postData }: { postData: Post | undefined }) {
 
       {comments.showForm && (
         <CommentForm
-          contentComment=""
-          setcontentComment={() => {}}
+          contentComment={comments.content}
+          setcontentComment={comments.setContent}
           profilePicture={user?.profilePictureUrl}
           handleSend={async () => await handlers.onCommentAdded()}
           placeholder="Add a comment..."

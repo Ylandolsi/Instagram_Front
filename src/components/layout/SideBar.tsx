@@ -43,7 +43,7 @@ export function SideBar({ withNames }: { withNames?: boolean }) {
           )}
         </div>
       </Link>
-      <Link to="/">
+      <Link to="/upload">
         <div className="flex items-center gap-6">
           <Plus size={30} />
           {withNames && (

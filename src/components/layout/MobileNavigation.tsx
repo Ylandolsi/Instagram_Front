@@ -9,7 +9,7 @@ export function MobileNavigation() {
       <Link to={"/"}>
         <Home size={30} style={{ color: "#fff" }} />
       </Link>
-      <Link to="/">
+      <Link to="/upload">
         <div className="flex items-center gap-6">
           <Plus size={30} />
         </div>

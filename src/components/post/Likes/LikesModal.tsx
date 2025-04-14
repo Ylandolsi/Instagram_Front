@@ -72,7 +72,7 @@ export function LikesModal({
       <div className="fixed inset-0 flex justify-center items-center backdrop-blur z-20 ">
         <div
           ref={outsideRef}
-          className=" w-[420px] flex flex-col bg-[#333333] pt-3 rounded-lg">
+          className=" overflow-auto max-h-[600px] w-[90%] max-w-[420px] flex flex-col bg-[#333333] pt-3 rounded-lg">
           <div className="flex justify-between items-start border-b ">
             <div className="w-[48px] h-[43px] "></div>
             <div className="font-bold text-xl">Likes</div>
@@ -116,6 +116,7 @@ export function LikesModal({
                     </div>
                     {currentUser?.id !== user.id && (
                       <FollowUnfollow
+                        id={user.id}
                         isFollowedByCurrentUser={user.isFollowedByCurrentUser}
                       />
                     )}

@@ -19,6 +19,7 @@ export function PostsGrid({ posts, loading, loaderRef }: PostsGridProps) {
   const close = () => {
     if (ref === null) return;
     if (ref.current) setPostSelected(null);
+    window.location.reload();
   };
   useOutsideClick(ref, close);
 
@@ -44,11 +45,13 @@ export function PostsGrid({ posts, loading, loaderRef }: PostsGridProps) {
         )}
       </div>
       {postSelected != null && (
-        <div className="fixed w-screen h-screen inset-0  bg-opacity-50 backdrop-blur flex justify-center items-center z-30">
+        <div className="fixed w-screen h-screen inset-0  bg-opacity-50 backdrop-blur flex justify-center items-center z-30 ">
           <div
             ref={ref}
-            className="relative max-h-[90vh] max-w-[600px]  overflow-auto scale-80 md:scale-100 bg-[#191919] shadow-lg shadow-gray-500 rounded-lg p-4 flex justify-center">
-            <PostCard postData={posts[postSelected] as Post} />
+            className="relative max-h-[90vh] max-w-[600px]  overflow-auto scale-80 md:scale-100 bg-[#191919] shadow-lg shadow-gray-500 rounded-lg  flex justify-center   ">
+            <div className="p-5">
+              <PostCard postData={posts[postSelected] as Post} />
+            </div>
             <div>
               <button
                 className="absolute top-2 right-2 text-white"

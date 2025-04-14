@@ -11,6 +11,7 @@ export function useComments(postId: string, initialCount: number = 0) {
   const [loading, setLoading] = useState(false);
   const [hasNextPage, setHasNextPage] = useState(true);
   const [page, setPage] = useState(1);
+  const [content, setContent] = useState<string>("");
   const pageSize = 5;
 
   const toggleVisibility = useCallback(() => {
@@ -77,5 +78,7 @@ export function useComments(postId: string, initialCount: number = 0) {
     loadMore: () => loadComments(false),
     refresh,
     incrementCount,
+    setContent,
+    content,
   };
 }

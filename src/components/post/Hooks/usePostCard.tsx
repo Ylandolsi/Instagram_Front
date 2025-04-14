@@ -3,6 +3,7 @@ import { Post } from "@/types/post.types";
 import { useLikes } from "../Likes/Hooks/useLikes";
 import { useComments } from "../Comments/Hooks/useComments";
 import { useAuth } from "@/contexts/authContext";
+import { commentsApi } from "@/api/comments";
 
 export function usePostCard(postData: Post) {
   const { user } = useAuth();
@@ -23,7 +24,9 @@ export function usePostCard(postData: Post) {
     loadMoreComments: () => comments.loadMore(),
     onCommentAdded: async () => {
       comments.incrementCount();
+      commentsApi.createComment(postData.id, comments.content, null);
       setShowCommentForm(false);
+      comments.setContent("");
       if (comments.visible) {
         await comments.refresh();
       }
@@ -48,6 +51,8 @@ export function usePostCard(postData: Post) {
       loading: comments.loading,
       hasNextPage: comments.hasNextPage,
       showForm: showCommentForm,
+      setContent: comments.setContent,
+      content: comments.content,
     },
     handlers,
     user,
