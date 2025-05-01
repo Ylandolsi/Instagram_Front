@@ -10,6 +10,7 @@ import relativeTime from "dayjs/plugin/relativeTime";
 import { CommentForm } from "./CommentForm";
 import { HeartFilledOrNotFilled } from "../PostActions";
 import { likesApi } from "@/api/likes";
+import { Link } from "react-router-dom";
 
 dayjs.extend(relativeTime);
 
@@ -119,20 +120,25 @@ const CommentItem = ({ comment }: { comment: Comment }) => {
     <div className="ml-2">
       <div className="flex items-start justify-between gap-2">
         <div className="flex gap-2">
-          <img
-            src={comment.user.profilePictureUrl || blankpdp}
-            className="w-8 h-8 rounded-full"
-            alt={comment.user.userName}
-            onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = "https://via.placeholder.com/80";
-            }}
-          />
+          <Link to={`/profile/${comment.user.id}`}>
+            <img
+              src={comment.user.profilePictureUrl || blankpdp}
+              className="w-8 h-8 rounded-full"
+              alt={comment.user.userName}
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "https://via.placeholder.com/80";
+              }}
+            />
+          </Link>
           <div className="flex flex-col">
             <div>
-              <span className="font-bold mr-2">{comment.user.userName}</span>
+              <Link to={`/profile/${comment.user.id}`}>
+                <span className="font-bold mr-2">{comment.user.userName}</span>
+              </Link>
               <span>{comment.content}</span>
             </div>
+
             <div className="text-xs text-gray-400 flex gap-3">
               {getRelativeTime(comment.createdAt)}
 

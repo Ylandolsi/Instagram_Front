@@ -8,6 +8,7 @@ import { likesApi } from "@/api/likes";
 import useOutsideClick from "@/hooks/useOutsideClick";
 import blankpdp from "@/assets/blankpdp.png";
 import { FollowUnfollow } from "@/components/common/FollowUnfollow";
+import { Link } from "react-router-dom";
 
 interface LikesModalProps {
   postId: string;
@@ -93,27 +94,31 @@ export function LikesModal({
                   <div
                     key={user.id}
                     className="flex justify-between p-3 items-center">
-                    <div className="flex gap-4 items-center ">
-                      <div>
-                        <img
-                          src={user.profilePictureUrl || blankpdp}
-                          className="rounded-full"
-                          style={{ width: 40 }}
-                          alt={user.userName}
-                          onError={(e) => {
-                            e.currentTarget.onerror = null;
-                            e.currentTarget.src =
-                              "https://via.placeholder.com/40";
-                          }}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="font-bold text-lg">{user.userName}</div>
-                        <div className="font-medium text-gray-400/90 text-sm">
-                          {user.firstName} {user.lastName}
+                    <Link to={`/profile/${user.id}`}>
+                      <div className="flex gap-4 items-center ">
+                        <div>
+                          <img
+                            src={user.profilePictureUrl || blankpdp}
+                            className="rounded-full"
+                            style={{ width: 40 }}
+                            alt={user.userName}
+                            onError={(e) => {
+                              e.currentTarget.onerror = null;
+                              e.currentTarget.src =
+                                "https://via.placeholder.com/40";
+                            }}
+                          />
+                        </div>
+                        <div className="flex flex-col">
+                          <div className="font-bold text-lg">
+                            {user.userName}
+                          </div>
+                          <div className="font-medium text-gray-400/90 text-sm">
+                            {user.firstName} {user.lastName}
+                          </div>
                         </div>
                       </div>
-                    </div>
+                    </Link>
                     {currentUser?.id !== user.id && (
                       <FollowUnfollow
                         id={user.id}

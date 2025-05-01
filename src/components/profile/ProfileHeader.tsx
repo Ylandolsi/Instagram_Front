@@ -5,6 +5,7 @@ import { FollowUnfollow } from "../common/FollowUnfollow";
 import blankpdp from "@/assets/blankpdp.png";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import { ProfileStats } from "./ProfileStats";
+import { ToastContainer } from "react-toastify";
 
 interface ProfileHeaderProps {
   userData: User;
@@ -15,6 +16,7 @@ export function ProfileHeader({ userData }: ProfileHeaderProps) {
   const isCurrentUser = user?.id === userData?.id;
 
   const isTablet = useMediaQuery("(max-width: 768px)");
+  console.log("userData", userData);
 
   return (
     <div className="flex flex-col gap-3 py-5 pl-5 md:pl-10 border-b md:text-xl ">
@@ -34,15 +36,15 @@ export function ProfileHeader({ userData }: ProfileHeaderProps) {
 
             {!isCurrentUser ? (
               <FollowUnfollow
+                id={userData?.id}
                 isFollowedByCurrentUser={
                   userData?.isFollowedByCurrentUser || false
                 }
+                onclick={() => {
+                  window.location.reload();
+                }}
               />
-            ) : (
-              <Button className="bg-[#4a4a4a] text-white hover:bg-[#303030]">
-                Edit Profile
-              </Button>
-            )}
+            ) : null}
           </div>
           <ProfileStats apply={2} userData={userData} />
         </div>

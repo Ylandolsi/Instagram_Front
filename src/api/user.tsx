@@ -24,4 +24,10 @@ export const userApi = {
   UnfollowUser: async (userId: string) => {
     return await api.post<apiResponse<User>>(`Users/${userId}/unfollow`);
   },
+
+  searchUsers: async (query: string, page: number, pageSize: number) => {
+    return await api.get<Page<User>>(
+      `Users/search?query=${query}&page=${page}&pageSize=${pageSize}`
+    );
+  },
 };

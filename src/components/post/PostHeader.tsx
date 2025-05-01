@@ -13,8 +13,8 @@ function getRelativeTime(date: Date) {
 
 function PostHeader({ postData }: { postData: Post }) {
   return (
-    <Link to={`/profile/${postData.user.id}`}>
-      <div className="flex justify-start gap-5">
+    <div className="flex justify-start gap-5">
+      <Link to={`/profile/${postData.user.id}`}>
         <div className="rounded-full overflow-hidden">
           <img
             src={postData.user.profilePictureUrl || blankpdp}
@@ -26,12 +26,12 @@ function PostHeader({ postData }: { postData: Post }) {
             }}
           />
         </div>
-        <div className="flex flex-col">
-          <div className="font-bold">{postData.user.userName}</div>
-          <div>{getRelativeTime(postData.createdAt)}</div>
-        </div>
+      </Link>
+      <div className="flex flex-col">
+        <div className="font-bold">{postData.user.userName}</div>
+        <div>{getRelativeTime(postData.createdAt)}</div>
       </div>
-    </Link>
+    </div>
   );
 }
 

@@ -10,7 +10,7 @@ export function Login() {
   const { loginGoogle } = useAuth();
 
   return (
-    <div className="flex justify-center items-center mt-[40px] ">
+    <div className="flex justify-center items-center h-full ">
       <div className="hidden mdl:block">
         <img
           src={login1}

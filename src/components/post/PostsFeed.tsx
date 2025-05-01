@@ -3,83 +3,63 @@ import { Post } from "@/types/post.types";
 import { useCallback, useEffect, useState, useRef } from "react";
 import { PostCard } from "./PostCard";
 import { Loader } from "../common/Loader";
+import { InfiniteScroll } from "../common/InfiniteScroll";
 
 export function PostsFeed() {
   const [posts, setPosts] = useState<Post[]>([]);
   const [page, setPage] = useState(1);
   const [hasNextPage, setHasNextPage] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const loadingRef = useRef(false);
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const loaderElementRef = useRef<HTMLDivElement | null>(null);
+  const isFetching = useRef(false);
 
-  const pageSize = 5;
+  const pageSize = 10;
 
-  const fetchPosts = useCallback(async () => {
-    if (!hasNextPage || loadingRef.current) return;
+  const loadMorePosts = useCallback(async () => {
+    if (isFetching.current || !hasNextPage) {
+      console.log(
+        `Skipping fetch: isFetching=${isFetching.current}, hasNextPage=${hasNextPage}`
+      );
+      return;
+    }
 
-    loadingRef.current = true;
-    setLoading(true);
-
+    isFetching.current = true;
     try {
       console.log("Fetching posts for page:", page);
       const response = await postsApi.getAllPosts(page, pageSize);
-      setPosts((prevPosts) => [...prevPosts, ...response.data.data.items]);
+      const newItems = response.data.data.items;
+      const newHasNextPage = response.data.data.hasNextPage;
+
+      setPosts((prevPosts) => [...prevPosts, ...newItems]);
       setPage((prevPage) => prevPage + 1);
-      setHasNextPage(response.data.data.hasNextPage);
+      setHasNextPage(newHasNextPage);
     } catch (error) {
       console.error("Error fetching posts:", error);
     } finally {
-      setLoading(false);
-      loadingRef.current = false;
+      isFetching.current = false;
     }
-  }, [hasNextPage, page, pageSize]);
+  }, [page, hasNextPage, pageSize]);
 
   useEffect(() => {
-    if (page === 1) {
-      fetchPosts();
-    }
-
-    const options = {
-      root: null, // viewport (entire screen )
-      rootMargin: "100px", // add 100px to space of viewport (from top && bottom)
-      threshold: 0.1, // trigger when 10% of the target is visible
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-      const [entry] = entries;
-      if (entry.isIntersecting && !loadingRef.current && hasNextPage) {
-        console.log("Scroll threshold reached via IntersectionObserver");
-        fetchPosts();
-      }
-    }, options);
-
-    observerRef.current = observer;
-
-    if (loaderElementRef.current) {
-      observer.observe(loaderElementRef.current);
-    }
-
-    return () => {
-      if (observerRef.current) {
-        observerRef.current.disconnect();
-      }
-    };
-  }, [fetchPosts, hasNextPage, page]);
+    console.log("Initial mount: Fetching first page.");
+    loadMorePosts();
+  }, []);
 
   return (
-    <div className="max-w-[468px] mx-auto flex flex-col gap-2">
+    <InfiniteScroll
+      loadMore={loadMorePosts}
+      canLoadMore={hasNextPage}
+      isLoading={isFetching.current}
+      loader={
+        <div className="py-4 text-center">
+          <Loader />
+        </div>
+      }
+      endMessage={
+        <p className="py-4 text-center text-gray-500">No more posts to load.</p>
+      }
+      className="max-w-[468px] mx-auto flex flex-col gap-2">
       {posts.map((postData) => (
         <PostCard key={postData.id} postData={postData} />
       ))}
-
-      <div ref={loaderElementRef} className="h-10 w-full">
-        {loading && (
-          <div className="py-4 text-center">
-            <Loader />
-          </div>
-        )}
-      </div>
-    </div>
+    </InfiniteScroll>
   );
 }

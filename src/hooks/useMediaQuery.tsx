@@ -14,10 +14,8 @@ function useMediaQuery(query: string): boolean {
     // Initial check
     setMatches(mediaQueryList.matches);
 
-    // Listen for changes
     mediaQueryList.addEventListener("change", handleChange);
 
-    // Cleanup listener on unmount
     return () => {
       mediaQueryList.removeEventListener("change", handleChange);
     };

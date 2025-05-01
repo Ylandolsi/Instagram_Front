@@ -6,6 +6,7 @@ import { Loader } from "../common/Loader";
 import { FollowUnfollow } from "../common/FollowUnfollow";
 import { useAuth } from "@/contexts/authContext";
 import blankpdp from "@/assets/blankpdp.png";
+import { Link } from "react-router-dom";
 
 export function Followings({
   open,
@@ -89,28 +90,31 @@ export function Followings({
               <div
                 key={following.id}
                 className="flex justify-between p-3 items-center">
-                <div className="flex gap-4 items-center ">
-                  <div>
-                    <img
-                      src={following.profilePictureUrl || blankpdp}
-                      className="rounded-full"
-                      style={{ width: 40 }}
-                      alt={following.userName}
-                      onError={(e) => {
-                        e.currentTarget.onerror = null;
-                        e.currentTarget.src = "https://via.placeholder.com/40";
-                      }}
-                    />
-                  </div>
-                  <div className="flex flex-col">
-                    <div className="font-bold text-lg">
-                      {following.userName}
+                <Link to={`/profile/${following.id}`}>
+                  <div className="flex gap-4 items-center ">
+                    <div>
+                      <img
+                        src={following.profilePictureUrl || blankpdp}
+                        className="rounded-full"
+                        style={{ width: 40 }}
+                        alt={following.userName}
+                        onError={(e) => {
+                          e.currentTarget.onerror = null;
+                          e.currentTarget.src =
+                            "https://via.placeholder.com/40";
+                        }}
+                      />
                     </div>
-                    <div className="font-medium text-gray-400/90 text-sm">
-                      {following.firstName} {following.lastName}
+                    <div className="flex flex-col">
+                      <div className="font-bold text-lg">
+                        {following.userName}
+                      </div>
+                      <div className="font-medium text-gray-400/90 text-sm">
+                        {following.firstName} {following.lastName}
+                      </div>
                     </div>
                   </div>
-                </div>
+                </Link>
                 {currentUser?.id !== following.id && (
                   <FollowUnfollow
                     id={following.id}

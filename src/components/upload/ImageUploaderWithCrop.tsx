@@ -41,11 +41,6 @@ const ImageUploaderWithCrop: React.FC = () => {
   const imgRef = useRef<HTMLImageElement | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  // Helper function to center the crop
-
-  // Trigger file input click
-
-  // Move to crop step
   const handleProceedToCrop = () => {
     if (images.length === 0) {
       toast.error("Please select at least one image");

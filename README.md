@@ -1,54 +1,37 @@
-# React + TypeScript + Vite
+# Instagram Clone
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This project is a web application designed to replicate some of the core functionalities of Instagram.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Authentication:** User registration and login
+- **Feed:** Infinite scrolling feed displaying posts from followed users
+- **Post Creation:** Upload multiple images, crop them, add captions, and share
+- **Post Interaction:** Like/unlike posts, view users who liked a post
+- **Comments:** Add comments to posts, view comments, reply to comments, like/unlike comments
+- **Profiles:** View user profiles, including their posts, follower count, and following count
+- **Follow System:** Follow and unfollow users, view lists of followers and following
+- **Notifications:** Real-time notifications for likes, comments, and follows
+- **Search:** Search for users
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React, TypeScript, Vite
+- Tailwind CSS, Shadcn UI
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## Screenshots
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+**Login:**
+![Login Screen](./src/assets/screenshots/login.png)
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+**Register:**
+![Register Screen](./src/assets/screenshots/register.png)
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+**Profile/Search (Desktop):**
+![Profile and Search Desktop](./src/assets/screenshots/search.png)
+
+**Mobile Views:**
+
+|                           Search                            |                            Comments                             |                              Notifications                               |
+| :---------------------------------------------------------: | :-------------------------------------------------------------: | :----------------------------------------------------------------------: |
+| ![Search Mobile](./src/assets/screenshots/searchMobile.png) | ![Comments Mobile](./src/assets/screenshots/commentsMobile.png) | ![Notifications Mobile](./src/assets/screenshots/notificaitonMobile.png) |

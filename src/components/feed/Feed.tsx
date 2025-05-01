@@ -1,4 +1,3 @@
-import { PostCard } from "@/components/post/PostCard";
 import { PostsFeed } from "../post/PostsFeed";
 
 export function Feed() {

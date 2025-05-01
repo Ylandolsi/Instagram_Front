@@ -6,6 +6,7 @@
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "esModuleInterop": true,
 
     /* Bundler mode */
     "moduleResolution": "bundler",
@@ -27,5 +28,11 @@
       "@/*": ["./src/*"]
     }
   },
-  "include": ["src", "components/ui", "lib", "vite.config.ts"]
+  "include": [
+    "src",
+    "components/ui",
+    "lib",
+    "vite.config.ts",
+    "src/components/layout/__tests__"
+  ]
 }

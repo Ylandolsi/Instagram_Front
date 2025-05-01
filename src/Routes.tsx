@@ -9,6 +9,7 @@ import { LoadingPage } from "./pages/LoadingPage";
 import { GoogleAuthCallback } from "./components/auth/GoogleAuthCallback";
 import { Profile } from "./components/profile/Profile";
 import ImageUploaderWithCrop from "./components/upload/ImageUploaderWithCrop";
+import { NotificationPanel } from "./components/notification/NotificationPannel";
 
 function AppRoutes() {
   const { user, loading } = useAuth();
@@ -38,6 +39,7 @@ function AppRoutes() {
           <Route index element={<Home />} />
           <Route path="/profile/:id" element={<Profile />} />
           <Route path="/upload" element={<ImageUploaderWithCrop />} />
+          <Route path="/notification" element={<NotificationPanel />} />
         </Route>
 
         <Route path="*" element={<NotFound />} />
