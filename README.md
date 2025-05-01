@@ -2,6 +2,10 @@
 
 This project is a web application designed to replicate some of the core functionalities of Instagram.
 
+## Backend Repository
+
+The backend for this project can be found here: [Instagram_Backend](https://github.com/Ylandolsi/Instagram_Backend)
+
 ## Features
 
 - **Authentication:** User registration and login
